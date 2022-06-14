@@ -1,10 +1,11 @@
 package com.endava.tmd.soj.junit5.p07;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 
+import java.util.Locale;
+
+import static com.endava.tmd.soj.junit5.p01.ComputationUtils.sum;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 // Provocare: definiti cel putin 3 teste pentru clasa care tine scorul
@@ -15,16 +16,38 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 // Daca avem colegi pe proiect care sunt din diferite parti ale lumii,
 // cum putem scrie testul astfel incat sa functioneze pentru toti, indiferent de ce Locale are fiecare? 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class ScoreTest{
+ class ScoreTest{
     private Score score;
 
     @BeforeAll
-    void init(){
+    static void setupLocale(){
+       Locale.setDefault(Locale.US);
+        //Locale.setDefault(Locale.FRANCE);
+    }
+
+    @BeforeEach
+    void setupScore(){
         score=new Score();
+    }
+    @Test
+    void noAnswer(){
+        assertThat(score.getPercent()).isEqualTo("100.0");
+    }
+
+    @Test
+    void noneIncorrect(){
+        assertThat(score.addCorrectAnswer().getPercent()).isEqualTo("100.0");
     }
 
     @Test
     void percentForTwoIncorrectAnswerAndOneCorrectAnswerTest(){
-        assertEquals("33.3",score.addIncorrectAnswer().addIncorrectAnswer().addCorrectAnswer().getPercent());
+        assertThat(score.addIncorrectAnswer().addIncorrectAnswer().addCorrectAnswer().getPercent()).isEqualTo("33.3");
     }
+
+    @Test
+    void percentForOneIncorrectAnswerAndTwoCorrectAnswerTest(){
+        assertThat(score.addIncorrectAnswer().addCorrectAnswer().addCorrectAnswer().getPercent()).isEqualTo("66.7");
+    }
+
+
 }

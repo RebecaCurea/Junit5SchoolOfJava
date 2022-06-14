@@ -30,15 +30,15 @@ class ComputationUtilsTest {
     }
 
 
-    @ParameterizedTest(name = "{index} : the sum of {0} and {1} is {2}")
+    @ParameterizedTest(name = "{index} : the sum of {0} and {1} is Overflow")
     @CsvSource({
-            " 2147483647,      1,    Overflow while computing the sum",
-            " -2147483648,    -1,    Overflow while computing the sum"
+            " 2147483647,      1",
+            " -2147483648,    -1"
     })
-    void exceptionWhenSumIsLowerThanIntegerMinValue(int a, int b, String expected) {
+    void exceptionWhenSumIsLowerThanIntegerMinValue(int a, int b) {
         // AssertJ
         assertThatThrownBy(() -> ComputationUtils.sum(a, b))
                 .isInstanceOf(ArithmeticException.class)
-                .hasMessage(expected);
+                .hasMessage("Overflow while computing the sum");
     }
 }

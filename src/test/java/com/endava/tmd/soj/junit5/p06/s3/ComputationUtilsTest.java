@@ -46,16 +46,16 @@ class ComputationUtilsTest {
 
     @ParameterizedTest
     @MethodSource("exceptionInputProvider")
-    void exceptionWhenSumIsLowerThanIntegerMinValue(int a, int b, String expected) {
+    void exceptionWhenSumIsLowerThanIntegerMinValue(int a, int b) {
         // AssertJ
         assertThatThrownBy(() -> ComputationUtils.sum(a, b))
                 .isInstanceOf(ArithmeticException.class)
-                .hasMessage(expected);
+                .hasMessage("Overflow while computing the sum");
     }
     static Stream<Arguments> exceptionInputProvider() {
         return Stream.of(
-                arguments(Integer.MAX_VALUE, 1, "Overflow while computing the sum"),
-                arguments(Integer.MIN_VALUE, -1, "Overflow while computing the sum")
+                arguments(Integer.MAX_VALUE, 1),
+                arguments(Integer.MIN_VALUE, -1)
         );
     }
 }
