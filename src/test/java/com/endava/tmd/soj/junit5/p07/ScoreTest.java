@@ -2,6 +2,7 @@ package com.endava.tmd.soj.junit5.p07;
 
 import org.junit.jupiter.api.*;
 
+import java.text.NumberFormat;
 import java.util.Locale;
 
 import static com.endava.tmd.soj.junit5.p01.ComputationUtils.sum;
@@ -18,11 +19,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
  class ScoreTest{
     private Score score;
-
+    private static NumberFormat nf;
     @BeforeAll
     static void setupLocale(){
        Locale.setDefault(Locale.US);
         //Locale.setDefault(Locale.FRANCE);
+        nf= NumberFormat.getInstance(Locale.getDefault());
+        nf.setMinimumFractionDigits(1);
+
     }
 
     @BeforeEach
@@ -31,22 +35,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
     }
     @Test
     void noAnswer(){
-        assertThat(score.getPercent()).isEqualTo("100.0");
+        assertThat(score.getPercent()).isEqualTo(nf.format(100.0));
     }
 
     @Test
     void noneIncorrect(){
-        assertThat(score.addCorrectAnswer().getPercent()).isEqualTo("100.0");
+        assertThat(score.addCorrectAnswer().getPercent()).isEqualTo(nf.format(100.0));
     }
 
     @Test
     void percentForTwoIncorrectAnswerAndOneCorrectAnswerTest(){
-        assertThat(score.addIncorrectAnswer().addIncorrectAnswer().addCorrectAnswer().getPercent()).isEqualTo("33.3");
+        assertThat(score.addIncorrectAnswer().addIncorrectAnswer().addCorrectAnswer().getPercent()).isEqualTo(nf.format(33.3));
     }
 
     @Test
     void percentForOneIncorrectAnswerAndTwoCorrectAnswerTest(){
-        assertThat(score.addIncorrectAnswer().addCorrectAnswer().addCorrectAnswer().getPercent()).isEqualTo("66.7");
+        assertThat(score.addIncorrectAnswer().addCorrectAnswer().addCorrectAnswer().getPercent()).isEqualTo(nf.format(66.7));
     }
 
 
